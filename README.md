@@ -37,6 +37,15 @@ cd sarvam-class-agent/frontend && npm install && npm run dev
 
 Sessions are saved as JSON files in `backend/sessions/`.
 
+## Deploy the backend (Render)
+
+- Root directory: `backend` · Build: `yarn install` · Start: `yarn start`
+- `.env` is not committed, so set these under **Environment** in Render:
+  `SARVAM_API_KEY`, `LLM_MODEL=sarvam-105b`, `TTS_MODEL=bulbul:v4-flash`, `TTS_VOICE=kalpit_en_edtech`,
+  `TTS_LANGUAGE=en-IN`, `TTS_PACE=0.9`, `STT_MODEL=saaras:v3` (Render sets `PORT` itself)
+- Point the frontend at it with `NEXT_PUBLIC_API_URL=https://<your-service>.onrender.com`
+- The free plan's disk is wiped on every deploy/restart, so lessons in `sessions/` don't persist there.
+
 ## API
 
 | Method | Path | Step |
