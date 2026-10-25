@@ -4,10 +4,12 @@ import * as store from "./store.js";
 import * as P from "./pipeline.js";
 import { MAX_REJECTS } from "./config.js";
 import { tts } from "./tts.js";
+import { stt } from "./stt.js";
+import { readImage } from "./docai.js";
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "20mb" }));
 
 // Wrap a handler: load the session, run it, save, return it.
 const withSession = (fn) => async (req, res) => {
@@ -114,15 +116,51 @@ app.post(
 const audioCache = new Map();
 app.get("/api/tts", async (req, res) => {
   const text = String(req.query.text || "").trim();
+  const lang = String(req.query.lang || "");
   if (!text) return res.status(400).json({ error: "text is required" });
   try {
-    if (!audioCache.has(text)) audioCache.set(text, await tts(text));
-    res.set("Content-Type", "audio/mpeg").send(audioCache.get(text));
+    const key = `${lang}|${text}`;
+    if (!audioCache.has(key)) audioCache.set(key, await tts(text, lang));
+    res.set("Content-Type", "audio/mpeg").send(audioCache.get(key));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
+
+// ── Student side ──────────────────────────────────────────────
+
+// Voice doubt -> text (Sarvam saaras). Body: {audio: base64, mime}
+app.post("/api/stt", async (req, res) => {
+  try {
+    const { audio, mime } = req.body || {};
+    if (!audio) return res.status(400).json({ error: "audio is required" });
+    res.json(await stt(Buffer.from(audio, "base64"), mime));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Ask a doubt. Body: {question, slideId, language, image?: {data: base64, name, mime}}
+app.post(
+  "/api/sessions/:id/doubts",
+  withSession(async (s, { question, slideId, language, image }) => {
+    if (!question?.trim() && !image) throw new Error("Type, speak or upload an image for your doubt");
+    const imageText = image ? await readImage(Buffer.from(image.data, "base64"), image.name, image.mime) : "";
+    const answer = await P.answerDoubt(s, { question, slideId, imageText, language });
+    s.doubts = s.doubts || [];
+    s.doubts.push({
+      question: question?.trim() || "(image)",
+      slideId,
+      language: language || "en-IN",
+      hasImage: !!image,
+      imageText,
+      answer,
+      at: new Date().toISOString(),
+    });
+  })
+);
 
 const PORT = process.env.PORT || 8095;
 const server = app.listen(PORT, () => console.log(`sarvam-class-agent backend on http://localhost:${PORT}`));

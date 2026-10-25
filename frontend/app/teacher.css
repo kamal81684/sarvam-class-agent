@@ -1,0 +1,83 @@
+/* Teacher studio styles (extends globals.css) */
+.form-card .btn-row { margin-top: 4px; }
+.tile-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.tile-meta { font-size: 12px; color: var(--grey-500); margin-bottom: 12px; }
+.tile .btn-row a { font-size: 13px; }
+.empty { text-align: center; padding: 32px 16px; color: var(--grey-500); }
+
+/* Stepper */
+.stepper { display: flex; align-items: center; gap: 0; margin-top: 18px; overflow-x: auto; }
+.step { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.step-dot { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; background: var(--grey-200); color: var(--grey-500); border: 2px solid var(--grey-300); }
+.step-label { font-size: 13px; font-weight: 600; color: var(--grey-500); }
+.step.done .step-dot { background: var(--primary); border-color: var(--primary); color: #fff; }
+.step.done .step-label { color: var(--grey-700); }
+.step.current .step-dot { background: #fff; border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 4px var(--primary-lighter); }
+.step.current .step-label { color: var(--primary-dark); }
+.step-line { flex: 1; min-width: 24px; height: 2px; background: var(--grey-300); margin: 0 10px; }
+.step-line.done { background: var(--primary); }
+
+/* Outline sections */
+.sections { display: grid; gap: 12px; margin-bottom: 20px; }
+.section-card { display: flex; gap: 14px; border: 1px solid var(--grey-200); border-radius: 12px; padding: 16px; background: var(--grey-100); }
+.section-num { width: 32px; height: 32px; flex-shrink: 0; border-radius: 10px; background: var(--primary-lighter); color: var(--primary-dark); display: grid; place-items: center; font-weight: 800; }
+.section-card h4 { margin: 2px 0 4px; font-size: 15px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { font-size: 12px; padding: 4px 10px; border-radius: 99px; background: #fff; border: 1px solid var(--grey-300); color: var(--grey-700); }
+
+/* Pills */
+.pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; scrollbar-width: thin; }
+.pill { flex-shrink: 0; padding: 7px 14px; min-height: 0; border-radius: 99px; font-size: 13px; font-weight: 600; background: var(--grey-200); color: var(--grey-700); border: 1px solid transparent; }
+.pill:hover { background: var(--grey-300); box-shadow: none; }
+.pill.active { background: var(--primary-lighter); color: var(--primary-dark); border-color: var(--primary-light); }
+.pill .num { opacity: 0.6; margin-right: 2px; }
+
+/* Gate */
+.gate { border-top: 1px solid var(--grey-200); margin-top: 20px; padding-top: 18px; }
+
+/* Chat */
+.chat { display: flex; flex-direction: column; gap: 14px; margin: 8px 0 20px; max-height: 520px; overflow-y: auto; padding-right: 4px; }
+.bubble-row { display: flex; gap: 10px; align-items: flex-start; }
+.bubble-row.me { flex-direction: row-reverse; }
+.avatar { width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: #fff; background: var(--grey-500); }
+.avatar.teacher { background: var(--primary); }
+.avatar.me { background: var(--secondary); color: var(--grey-900); }
+.bubble { max-width: 75%; padding: 10px 14px; border-radius: 14px; background: var(--grey-200); color: var(--grey-800); font-size: 14px; }
+.bubble .who { display: block; font-size: 12px; font-weight: 700; margin-bottom: 2px; color: var(--grey-600); }
+.bubble.teacher { background: var(--primary-lighter); border-top-left-radius: 4px; }
+.bubble.teacher .who { color: var(--primary-dark); }
+.bubble.student { border-top-left-radius: 4px; }
+.bubble.me { background: var(--secondary-lighter); border-top-right-radius: 4px; }
+.bubble.me .who { color: var(--secondary-dark); }
+
+/* Regen checkbox cards */
+.check-cards { display: grid; gap: 10px; margin-bottom: 20px; }
+.check-card { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--grey-300); border-radius: 12px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.check-card:hover { border-color: var(--primary-light); }
+.check-card.on { border-color: var(--primary); background: var(--primary-lighter); }
+.check-card input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--primary); flex-shrink: 0; }
+.check-card b { display: block; margin-bottom: 2px; }
+
+/* Player */
+.player-stage { position: relative; }
+.caption { background: var(--grey-900); color: #fff; border-radius: 0 0 12px 12px; padding: 14px 18px; min-height: 52px; font-size: 15px; margin-top: -12px; padding-top: 24px; }
+.caption.empty-cap { color: var(--grey-500); }
+.controls { display: flex; align-items: center; gap: 14px; margin-top: 16px; flex-wrap: wrap; }
+.play-btn { width: 56px; height: 56px; min-height: 56px; padding: 0; border-radius: 50%; font-size: 20px; box-shadow: var(--shadow-primary); }
+.progress-wrap { flex: 1; min-width: 160px; }
+.progress-text { font-size: 13px; color: var(--grey-600); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.progress { height: 6px; background: var(--grey-200); border-radius: 99px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--primary); border-radius: 99px; transition: width 0.3s; }
+
+/* Course suggestions on the New lesson form */
+.suggest { margin: -4px 0 18px; }
+.suggest-label { display: block; font-size: 13px; font-weight: 600; color: var(--secondary-dark); margin-bottom: 8px; }
+.suggest-list { display: flex; flex-wrap: wrap; gap: 8px; }
+button.suggest-chip { min-height: 0; padding: 7px 12px; border-radius: 99px; background: var(--grey-100); color: var(--grey-700); border: 1px solid var(--grey-300); font-weight: 600; font-size: 13px; text-align: left; }
+button.suggest-chip:hover { background: var(--primary-lighter); border-color: var(--primary-light); color: var(--primary-dark); box-shadow: none; }
+button.suggest-chip.active { background: var(--primary-lighter); border-color: var(--primary); color: var(--primary-dark); }
+
+/* lucide icons */
+.suggest-label, a.muted { display: inline-flex; align-items: center; gap: 6px; }
+.bubble-who { display: flex; align-items: center; gap: 6px; }
+.regen-icon { color: var(--secondary-dark); vertical-align: -2px; }

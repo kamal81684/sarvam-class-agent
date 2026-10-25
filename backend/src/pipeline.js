@@ -22,9 +22,11 @@ JSON shape: {"sections":[{"id":"s1","title":"...","description":"...","keyPoints
   return data.sections.map((s, i) => ({ ...s, id: `s${i + 1}` }));
 }
 
-const SLIDE_SYSTEM = `You build ONE presentation slide as a complete self-contained HTML document (inline <style> and <script>, no external assets).
-Design: dark theme (#0f172a background, light text), 16:9, fills 100vw x 100vh, large readable text, no scrolling.
-Make it visual and, where useful, interactive (simple diagram, steps, small simulation or quiz button).
+const SLIDE_SYSTEM = `You build ONE presentation slide as a complete self-contained HTML document (inline <style> and <script>, no external assets or CDNs).
+Canvas: exactly 1280px wide x 720px tall. html and body are fixed at that size with overflow hidden, so EVERYTHING must fit on screen with no scrolling.
+Layout rules: 48px padding; title max 44px; body text 20-24px; at most 4 short bullet points (max 15 words each); use a two-column layout (text left, visual right) when there is a visual; never stack more than 5 blocks vertically.
+Design: dark theme (#0f172a background, light text, teal #1A97A4 and yellow #F9D666 accents), rounded cards, clean spacing.
+Make it visual and, where useful, interactive (simple diagram, steps, small simulation or quiz button) that also fits inside the canvas.
 Put data-ax="<short-id>" on 3-6 key elements (title, each key point, the diagram) so a narrator can highlight them.
 Return ONLY the HTML document starting with <!DOCTYPE html>.`;
 
@@ -121,4 +123,20 @@ JSON shape: {"actions":[{"target":"title","narration":"..."}]}`;
       }
     })
   );
+}
+
+// Student doubt: answer using the current slide and any text read from the uploaded image.
+export async function answerDoubt(session, { question, slideId, imageText, language }) {
+  const slide = session.slides.find((s) => s.id === slideId) || session.slides[0];
+  const section = session.outline.find((s) => s.id === slide?.id);
+  const narration = (slide?.actions || []).map((a) => a.narration).join(" ");
+  const system = `You are Dr. Smith, a friendly teacher helping a student with a doubt during the lesson "${session.topic}".
+Answer clearly in 3-6 short sentences, step by step if it is a problem. Plain text only, no markdown, since the answer is read aloud.
+Reply in the same language the student used${language && language !== "en-IN" ? ` (${language})` : ""}.`;
+  const user = `Current slide: ${slide?.title || "-"}
+Slide summary: ${section?.description || ""} ${(section?.keyPoints || []).join("; ")}
+Teacher narration: ${narration.slice(0, 2000)}
+${imageText ? `\nText read from the image the student uploaded:\n${imageText.slice(0, 4000)}\n` : ""}
+Student's doubt: ${question || "Please explain the uploaded image."}`;
+  return chat(system, user, 1500);
 }

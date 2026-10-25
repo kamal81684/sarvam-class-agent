@@ -1,7 +1,17 @@
 # Sarvam Class Agent
 
 Simple Node/Express + Next.js AI classroom agent. Every AI call goes to Sarvam:
-chat uses `sarvam-105b` and narration uses `bulbul:v3`.
+
+| Use | Sarvam API |
+|---|---|
+| Outline, slides, discussion, narration, doubt answers | Chat `sarvam-105b` |
+| Narration and spoken answers | TTS `bulbul:v3` |
+| Voice doubts | STT `saaras:v3` |
+| Photo doubts | Document AI (Sarvam Vision) |
+
+Two sides: **Teacher Studio** (`/`) builds lessons, and **Student** (`/learn`) plays finished lessons with an
+**Ask doubt** panel. Students can type, speak in any Indian language, or upload a photo of the question. They
+get an answer in the same language that is aware of the current slide, and can listen to it.
 
 Pipeline (same steps as the LangGraph version, each gate approved in the UI):
 
@@ -36,4 +46,6 @@ Sessions are saved as JSON files in `backend/sessions/`.
 | POST | `/api/sessions/:id/discuss` `{message}` | one discussion round |
 | POST | `/api/sessions/:id/end-discussion` | regen analysis |
 | POST | `/api/sessions/:id/regenerate` `{sectionIds}` | regen + narration → done |
-| GET | `/api/tts?text=...` | mp3 narration |
+| GET | `/api/tts?text=...&lang=hi-IN` | mp3 narration |
+| POST | `/api/stt` `{audio (base64), mime}` | voice → `{transcript, language}` |
+| POST | `/api/sessions/:id/doubts` `{question, slideId, language, image?: {data, name, mime}}` | student doubt → answer |
