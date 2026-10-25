@@ -15,12 +15,19 @@ html, body { margin: 0 !important; width: ${W}px !important; height: ${H}px !imp
 </style>
 <script>
 (function () {
+  // Shrink content that does not fit. While shrinking, widen the layout by the same
+  // factor so the content reflows across the full canvas instead of a corner.
   function fit() {
-    document.body.style.zoom = "";
-    var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-    var w = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
-    var z = Math.min(1, ${H} / h, ${W} / w);
-    if (z < 1) document.body.style.zoom = z;
+    var b = document.body, z = 1;
+    for (var i = 0; i < 5; i++) {
+      b.style.setProperty("zoom", String(z));
+      b.style.setProperty("width", ${W} / z + "px", "important");
+      b.style.setProperty("height", ${H} / z + "px", "important");
+      var h = b.scrollHeight, w = b.scrollWidth;
+      var next = Math.min(z, z * (${H} / z) / h, z * (${W} / z) / w);
+      if (next >= z - 0.005) break;
+      z = Math.max(next, 0.4);
+    }
   }
   window.addEventListener("load", function () { fit(); setTimeout(fit, 300); });
   window.addEventListener("message", function (e) {

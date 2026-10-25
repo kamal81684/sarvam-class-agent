@@ -26,6 +26,6 @@ export function list() {
     .readdirSync(DIR)
     .filter((f) => f.endsWith(".json"))
     .map((f) => JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8")))
-    .map(({ id, topic, stage, updatedAt }) => ({ id, topic, stage, updatedAt }))
+    .map(({ id, topic, stage, updatedAt, slides }) => ({ id, topic, stage, updatedAt, hasSlides: (slides || []).length > 0 }))
     .sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
 }

@@ -18,7 +18,7 @@ export default function LearnLesson({ params }) {
   if (error) return <p className="error">{error}</p>;
   if (!s) return <p className="loading"><span className="spinner" /> Loading lesson…</p>;
 
-  if (s.stage !== "done") {
+  if (!s.slides?.length) {
     return (
       <div className="card">
         <h2>{s.topic}</h2>
@@ -37,7 +37,10 @@ export default function LearnLesson({ params }) {
           <a href="/learn" className="muted"><ArrowLeft size={15} /> All lessons</a>
           <h2 style={{ marginTop: 6 }}>{s.topic}</h2>
         </div>
-        <span className="badge primary">{s.slides.length} slides</span>
+        <div className="btn-row">
+          {s.stage !== "done" && <span className="badge yellow">Preview · narration not added yet</span>}
+          <span className="badge primary">{s.slides.length} slides</span>
+        </div>
       </div>
       <div className="learn-layout">
         <div>

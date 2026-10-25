@@ -101,6 +101,7 @@ export default function SessionPage({ params }) {
             approveLabel="Approve & start discussion"
             onApprove={() => run("Starting discussion", "/content", { approve: true })}
             onReject={() => run("Regenerating slides", "/content", { approve: false, feedback })} />
+          <PublishNow busy={busy} run={run} />
         </div>
       )}
 
@@ -134,6 +135,7 @@ export default function SessionPage({ params }) {
               End discussion
             </button>
           </div>
+          <PublishNow busy={busy} run={run} />
         </div>
       )}
 
@@ -194,6 +196,18 @@ function RegenPicker({ s, busy, run }) {
       </div>
       <button disabled={!!busy} onClick={() => run("Regenerating slides and writing narration", "/regenerate", { sectionIds: picked })}>
         {picked.length ? `Regenerate ${picked.length} slide${picked.length > 1 ? "s" : ""} & finish` : "Skip & finish"}
+      </button>
+    </div>
+  );
+}
+
+// Shortcut: write narration now and make the lesson visible to students as "Ready".
+function PublishNow({ busy, run }) {
+  return (
+    <div className="publish-now">
+      <span className="muted">In a hurry? Skip the discussion and publish these slides with narration.</span>
+      <button className="yellow" disabled={!!busy} onClick={() => run("Writing narration and publishing", "/publish", {})}>
+        Publish to students
       </button>
     </div>
   );

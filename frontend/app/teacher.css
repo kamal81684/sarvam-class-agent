@@ -81,3 +81,5 @@ button.suggest-chip.active { background: var(--primary-lighter); border-color: v
 .suggest-label, a.muted { display: inline-flex; align-items: center; gap: 6px; }
 .bubble-who { display: flex; align-items: center; gap: 6px; }
 .regen-icon { color: var(--secondary-dark); vertical-align: -2px; }
+
+.publish-now { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding: 14px 16px; border-radius: var(--radius); background: var(--secondary-lighter); }

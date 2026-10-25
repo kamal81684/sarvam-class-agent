@@ -9,7 +9,7 @@ export default function LearnHome() {
 
   useEffect(() => {
     api("/sessions")
-      .then((all) => setLessons(all.filter((s) => s.stage === "done")))
+      .then((all) => setLessons(all.filter((s) => s.hasSlides)))
       .catch((e) => setError(e.message));
   }, []);
 
@@ -36,7 +36,7 @@ export default function LearnHome() {
             <a key={l.id} href={`/learn/${l.id}`} className="tile">
               <h3>{l.topic}</h3>
               <div className="tile-meta">
-                <span className="badge success">Ready</span>
+                {l.stage === "done" ? <span className="badge success">Ready</span> : <span className="badge yellow">Preview</span>}
                 <span className="muted">{l.updatedAt ? new Date(l.updatedAt).toLocaleDateString() : ""}</span>
               </div>
             </a>

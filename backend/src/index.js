@@ -168,6 +168,16 @@ app.get("/api/tts", async (req, res) => {
   }
 });
 
+// Publish now: skip (or end) the discussion, write narration and mark the lesson done.
+app.post(
+  "/api/sessions/:id/publish",
+  withSession(async (s) => {
+    if (!s.slides?.length) throw new Error("Generate slides before publishing");
+    await P.actionAgent(s);
+    s.stage = "done";
+  })
+);
+
 // ── Student side ──────────────────────────────────────────────
 
 // Voice doubt -> text (Sarvam saaras). Body: {audio: base64, mime}
