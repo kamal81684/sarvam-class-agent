@@ -29,7 +29,25 @@ const withSession = (fn) => async (req, res) => {
   }
 };
 
-app.get("/api/health", (_req, res) => res.json({ ok: true }));
+// Health check for Render / uptime monitors. Never exposes the key itself.
+function health(_req, res) {
+  res.json({
+    ok: true,
+    service: "sarvam-class-agent-backend",
+    uptimeSeconds: Math.round(process.uptime()),
+    sarvamKeyConfigured: Boolean(process.env.SARVAM_API_KEY),
+    models: {
+      llm: process.env.LLM_MODEL || "sarvam-105b",
+      tts: process.env.TTS_MODEL || "bulbul:v3",
+      voice: process.env.TTS_VOICE || "ritu",
+      stt: process.env.STT_MODEL || "saaras:v3",
+    },
+    time: new Date().toISOString(),
+  });
+}
+app.get("/health", health);
+app.get("/api/health", health);
+app.get("/", (_req, res) => res.json({ service: "sarvam-class-agent-backend", health: "/health" }));
 app.get("/api/sessions", (_req, res) => res.json(store.list()));
 app.get("/api/sessions/:id", (req, res) => {
   const s = store.load(req.params.id);
