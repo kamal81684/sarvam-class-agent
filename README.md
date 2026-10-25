@@ -1,5 +1,7 @@
 # Sarvam Class Agent
 
+Visual overview of features, flows and roadmap: [docs/roadmap.html](docs/roadmap.html) (open it in a browser).
+
 Simple Node/Express + Next.js AI classroom agent. Every AI call goes to Sarvam:
 
 | Use | Sarvam API |

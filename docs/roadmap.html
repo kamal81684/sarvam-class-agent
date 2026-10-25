@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sarvam Class Agent Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f6f8fa; --surface: #ffffff; --surface-2: #f1f5f7; --line: #dfe3e8;
+    --text: #1c252e; --muted: #637381; --primary: #1a97a4; --primary-soft: #e3f6f8;
+    --yellow: #d7a608; --yellow-soft: #fef7e0; --violet: #6e56cf; --violet-soft: #efecfb;
+    --green: #118d57; --green-soft: #dcf7e6; --grey-soft: #eef1f4;
+    --shadow: 0 1px 2px rgba(20, 30, 40, .06), 0 10px 24px -8px rgba(20, 30, 40, .12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f151b; --surface: #161f27; --surface-2: #1c2731; --line: #2a3742;
+      --text: #e8eef2; --muted: #95a3af; --primary: #3cc3d0; --primary-soft: #133a40;
+      --yellow: #f4cc4b; --yellow-soft: #3a3115; --violet: #a594f0; --violet-soft: #2a2545;
+      --green: #4ccf8a; --green-soft: #173527; --grey-soft: #222d36;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 24px -8px rgba(0, 0, 0, .5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f151b; --surface: #161f27; --surface-2: #1c2731; --line: #2a3742;
+    --text: #e8eef2; --muted: #95a3af; --primary: #3cc3d0; --primary-soft: #133a40;
+    --yellow: #f4cc4b; --yellow-soft: #3a3115; --violet: #a594f0; --violet-soft: #2a2545;
+    --green: #4ccf8a; --green-soft: #173527; --grey-soft: #222d36;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 24px -8px rgba(0, 0, 0, .5);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 16px 72px; }
+  h1 { font-size: 40px; line-height: 1.1; margin: 0 0 10px; letter-spacing: -.02em; }
+  h2 { font-size: 24px; margin: 0 0 6px; letter-spacing: -.01em; }
+  h3 { font-size: 16px; margin: 0 0 4px; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  section { margin-top: 48px; }
+  .sec-head { margin-bottom: 18px; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); margin-bottom: 6px; }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: center; }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .stat b { display: block; font-size: 26px; letter-spacing: -.02em; }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+
+  /* cards */
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  .feat { position: relative; padding: 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .feat .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 10px; }
+  .feat .ic svg { width: 19px; height: 19px; }
+  .feat p { font-size: 13.5px; color: var(--muted); }
+  .feat .tag { position: absolute; top: 16px; right: 16px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+  .t-teal { background: var(--primary-soft); color: var(--primary); }
+  .t-yellow { background: var(--yellow-soft); color: var(--yellow); }
+  .t-violet { background: var(--violet-soft); color: var(--violet); }
+  .t-green { background: var(--green-soft); color: var(--green); }
+  .t-grey { background: var(--grey-soft); color: var(--muted); }
+
+  /* diagrams */
+  .diagram { width: 100%; height: auto; display: block; }
+  .diagram text { font-family: Inter, sans-serif; fill: var(--text); }
+  .diagram .sub { fill: var(--muted); font-size: 11px; }
+  .diagram .box { fill: var(--surface-2); stroke: var(--line); }
+  .diagram .edge { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+  .diagram .edge.hot { stroke: var(--primary); stroke-width: 2.2; }
+  .diagram .lbl { font-size: 11px; fill: var(--muted); }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .scroll-x > svg { min-width: 760px; }
+
+  /* pipeline steps */
+  .steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; counter-reset: s; }
+  .step { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 12px 12px; box-shadow: var(--shadow); }
+  .step::before { counter-increment: s; content: counter(s); position: absolute; top: -11px; left: 12px; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; }
+  .step h3 { font-size: 14px; margin-top: 4px; }
+  .step p { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .time { display: inline-block; margin-top: 8px; font-size: 11.5px; font-weight: 700; color: var(--primary); background: var(--primary-soft); padding: 2px 8px; border-radius: 99px; }
+  .gate { display: inline-block; margin-top: 8px; margin-left: 4px; font-size: 11.5px; font-weight: 700; color: var(--yellow); background: var(--yellow-soft); padding: 2px 8px; border-radius: 99px; }
+
+  /* timing bars */
+  .bars { display: grid; gap: 10px; }
+  .bar { display: grid; grid-template-columns: 190px 1fr 70px; align-items: center; gap: 12px; font-size: 13.5px; }
+  .bar .track { height: 12px; background: var(--grey-soft); border-radius: 99px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 99px; background: var(--primary); }
+  .bar .fill.slow { background: var(--muted); opacity: .55; }
+  .bar b { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* roadmap */
+  .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .lane { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+  .lane-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: 700; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .lane ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .lane li { font-size: 13.5px; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); }
+  .lane li small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* api table */
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  code { font: 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--surface-2); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; }
+  .m { font-weight: 700; font-size: 11px; padding: 2px 7px; border-radius: 6px; }
+
+  .theme-btn { position: fixed; top: 14px; right: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 99px; padding: 6px 12px; font: 600 12px Inter, sans-serif; cursor: pointer; box-shadow: var(--shadow); }
+  footer { margin-top: 56px; text-align: center; font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: repeat(2, 1fr); row-gap: 22px; }
+    .lanes { grid-template-columns: 1fr; }
+    .bar { grid-template-columns: 120px 1fr 56px; font-size: 12.5px; }
+    h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-btn" id="themeBtn" type="button">Toggle theme</button>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Product roadmap</div>
+      <h1>Sarvam Class Agent</h1>
+      <p class="muted" style="font-size:17px;max-width:560px">Type a topic and AI builds a narrated, interactive classroom lesson. Teachers review every step. Students learn with voice narration and can ask doubts by text, voice or photo, in any Indian language.</p>
+      <div class="chips">
+        <span class="chip">Next.js 14</span><span class="chip">Node + Express</span><span class="chip">Sarvam AI only</span><span class="chip">lucide-react</span><span class="chip">JSON file storage</span>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>4</b><span>Sarvam APIs: chat, TTS, STT, Document AI</span></div>
+      <div class="stat"><b>~60s</b><span>topic to finished lesson (AI time)</span></div>
+      <div class="stat"><b>5x</b><span>faster narration with parallel prefetch</span></div>
+      <div class="stat"><b>22+</b><span>Indian languages for doubts</span></div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Architecture</div>
+      <h2>How the pieces connect</h2>
+      <p class="muted">The browser only talks to the Express backend; the backend is the only thing that holds the Sarvam key.</p>
+    </div>
+    <div class="card scroll-x">
+      <svg class="diagram" viewBox="0 0 960 330" role="img" aria-label="Architecture: Next.js frontend talks to Express backend, which calls four Sarvam APIs and stores lessons and audio on disk">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color:var(--muted)"/></marker>
+        </defs>
+        <!-- frontend -->
+        <rect x="20" y="40" width="230" height="250" rx="16" class="box"/>
+        <text x="40" y="72" font-weight="700" font-size="15">Frontend · Next.js</text>
+        <text x="40" y="92" class="sub">localhost:3010</text>
+        <rect x="40" y="110" width="190" height="52" rx="10" fill="var(--primary-soft)"/>
+        <text x="56" y="132" font-weight="700" font-size="13" style="fill:var(--primary)">Teacher Studio  /</text>
+        <text x="56" y="150" class="sub">build &amp; approve lessons</text>
+        <rect x="40" y="174" width="190" height="52" rx="10" fill="var(--yellow-soft)"/>
+        <text x="56" y="196" font-weight="700" font-size="13" style="fill:var(--yellow)">Student  /learn</text>
+        <text x="56" y="214" class="sub">player + Ask Doubt</text>
+        <text x="40" y="262" class="sub">Mic recording · image upload</text>
+        <text x="40" y="278" class="sub">audio prefetch cache</text>
+
+        <!-- backend -->
+        <rect x="345" y="40" width="250" height="250" rx="16" class="box"/>
+        <text x="365" y="72" font-weight="700" font-size="15">Backend · Express</text>
+        <text x="365" y="92" class="sub">localhost:8095</text>
+        <text x="365" y="124" font-size="13">pipeline.js</text><text x="470" y="124" class="sub">lesson agents</text>
+        <text x="365" y="150" font-size="13">llm.js</text><text x="470" y="150" class="sub">chat + JSON retry</text>
+        <text x="365" y="176" font-size="13">tts.js · stt.js</text><text x="470" y="176" class="sub">voice in/out</text>
+        <text x="365" y="202" font-size="13">docai.js</text><text x="470" y="202" class="sub">read photos</text>
+        <text x="365" y="228" font-size="13">store.js</text><text x="470" y="228" class="sub">sessions/*.json</text>
+        <rect x="365" y="246" width="210" height="30" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+        <text x="378" y="266" class="sub">sessions/audio/*.mp3  (disk cache)</text>
+
+        <!-- sarvam -->
+        <text x="700" y="34" font-weight="700" font-size="15">Sarvam AI</text>
+        <rect x="690" y="48" width="250" height="52" rx="10" fill="var(--primary-soft)"/>
+        <text x="706" y="70" font-weight="700" font-size="13" style="fill:var(--primary)">Chat · sarvam-105b</text>
+        <text x="706" y="88" class="sub">outline, slides, discussion, answers</text>
+        <rect x="690" y="110" width="250" height="52" rx="10" fill="var(--violet-soft)"/>
+        <text x="706" y="132" font-weight="700" font-size="13" style="fill:var(--violet)">TTS · bulbul</text>
+        <text x="706" y="150" class="sub">narration + spoken answers</text>
+        <rect x="690" y="172" width="250" height="52" rx="10" fill="var(--yellow-soft)"/>
+        <text x="706" y="194" font-weight="700" font-size="13" style="fill:var(--yellow)">STT · saaras</text>
+        <text x="706" y="212" class="sub">voice doubts, language detect</text>
+        <rect x="690" y="234" width="250" height="52" rx="10" fill="var(--green-soft)"/>
+        <text x="706" y="256" font-weight="700" font-size="13" style="fill:var(--green)">Document AI · Sarvam Vision</text>
+        <text x="706" y="274" class="sub">text from uploaded photos</text>
+
+        <!-- edges -->
+        <path class="edge hot" d="M250 150 H345" marker-end="url(#arr)"/>
+        <path class="edge" d="M345 190 H250" marker-end="url(#arr)"/>
+        <text x="262" y="140" class="lbl">REST / JSON</text>
+        <text x="262" y="208" class="lbl">mp3 · JSON</text>
+        <path class="edge hot" d="M595 120 C640 120 650 74 690 74" marker-end="url(#arr)"/>
+        <path class="edge" d="M595 150 C640 150 650 136 690 136" marker-end="url(#arr)"/>
+        <path class="edge" d="M595 180 C640 180 650 198 690 198" marker-end="url(#arr)"/>
+        <path class="edge" d="M595 210 C640 210 650 260 690 260" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- TEACHER PIPELINE -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Teacher Studio</div>
+      <h2>Topic to lesson in 6 steps</h2>
+      <p class="muted">Each yellow step waits for the teacher: approve, or reject with feedback (up to 3 times). Times are measured on a real run.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Outline</h3><p>Topic + notes become 5-8 sections with key points.</p><span class="time">~9s</span><span class="gate">review</span></div>
+      <div class="step"><h3>Slides</h3><p>One interactive 1280×720 HTML slide per section, all built in parallel.</p><span class="time">~35s</span><span class="gate">review</span></div>
+      <div class="step"><h3>Discussion</h3><p>Dr. Smith, Alex and Maya talk it through. Teacher can join or pass.</p><span class="time">~2s/round</span></div>
+      <div class="step"><h3>Analyse</h3><p>AI flags slides the discussion showed were confusing.</p><span class="time">~1s</span><span class="gate">pick</span></div>
+      <div class="step"><h3>Improve</h3><p>Picked slides are rewritten using the discussion.</p><span class="time">~10s</span></div>
+      <div class="step"><h3>Narrate</h3><p>Teacher script per slide: each step highlights an element while the voice plays.</p><span class="time">~8s</span></div>
+    </div>
+  </section>
+
+  <!-- STUDENT DOUBT FLOW -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Student · Ask Doubt</div>
+      <h2>Three ways to ask, one answer</h2>
+      <p class="muted">The answer knows which slide the student is on and replies in the language they asked in, then reads it aloud.</p>
+    </div>
+    <div class="card scroll-x">
+      <svg class="diagram" viewBox="0 0 960 300" role="img" aria-label="Ask doubt flow: typed text, voice via Sarvam STT, or photo via Sarvam Document AI all go to sarvam-105b with slide context, which returns an answer that is spoken with bulbul TTS">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker>
+        </defs>
+        <!-- inputs -->
+        <rect x="20" y="30" width="170" height="58" rx="12" class="box"/>
+        <text x="38" y="56" font-weight="700" font-size="14">Type</text>
+        <text x="38" y="75" class="sub">any language</text>
+        <rect x="20" y="120" width="170" height="58" rx="12" class="box"/>
+        <text x="38" y="146" font-weight="700" font-size="14">Speak</text>
+        <text x="38" y="165" class="sub">mic, up to 28s</text>
+        <rect x="20" y="210" width="170" height="58" rx="12" class="box"/>
+        <text x="38" y="236" font-weight="700" font-size="14">Photo</text>
+        <text x="38" y="255" class="sub">PNG / JPG of the question</text>
+
+        <!-- converters -->
+        <rect x="250" y="120" width="190" height="58" rx="12" fill="var(--yellow-soft)"/>
+        <text x="266" y="146" font-weight="700" font-size="13" style="fill:var(--yellow)">Sarvam STT</text>
+        <text x="266" y="165" class="sub">text + language ~1s</text>
+        <rect x="250" y="210" width="190" height="58" rx="12" fill="var(--green-soft)"/>
+        <text x="266" y="236" font-weight="700" font-size="13" style="fill:var(--green)">Sarvam Document AI</text>
+        <text x="266" y="255" class="sub">reads the image ~3s</text>
+
+        <!-- brain -->
+        <rect x="510" y="95" width="200" height="110" rx="14" fill="var(--primary-soft)"/>
+        <text x="528" y="124" font-weight="700" font-size="14" style="fill:var(--primary)">sarvam-105b</text>
+        <text x="528" y="146" class="sub">+ current slide</text>
+        <text x="528" y="164" class="sub">+ teacher narration</text>
+        <text x="528" y="182" class="sub">+ text read from photo</text>
+
+        <!-- output -->
+        <rect x="770" y="95" width="170" height="110" rx="14" fill="var(--violet-soft)"/>
+        <text x="788" y="124" font-weight="700" font-size="14" style="fill:var(--violet)">Answer</text>
+        <text x="788" y="146" class="sub">shown in chat</text>
+        <text x="788" y="164" class="sub">Listen button</text>
+        <text x="788" y="182" class="sub">bulbul TTS, same lang</text>
+
+        <path class="edge" d="M190 59 C350 59 420 120 510 125" marker-end="url(#arr2)"/>
+        <path class="edge" d="M190 149 H250" marker-end="url(#arr2)"/>
+        <path class="edge" d="M190 239 H250" marker-end="url(#arr2)"/>
+        <path class="edge hot" d="M440 149 H510" marker-end="url(#arr2)"/>
+        <path class="edge hot" d="M440 239 C480 239 480 185 510 180" marker-end="url(#arr2)"/>
+        <path class="edge hot" d="M710 150 H770" marker-end="url(#arr2)"/>
+        <text x="300" y="80" class="lbl">question as typed</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- NARRATION SPEED -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Player · Narration</div>
+      <h2>Why narration starts instantly</h2>
+      <p class="muted">Each voice clip takes ~2.5s to make. The player fetches every step of the current and next slide at the same time, and the backend keeps clips on disk.</p>
+    </div>
+    <div class="card">
+      <div class="bars">
+        <div class="bar"><span>6 clips, one by one</span><div class="track"><div class="fill slow" style="width:100%"></div></div><b>~15s</b></div>
+        <div class="bar"><span>6 clips in parallel</span><div class="track"><div class="fill" style="width:21%"></div></div><b>3.1s</b></div>
+        <div class="bar"><span>Replay from disk cache</span><div class="track"><div class="fill" style="width:1%"></div></div><b>~1ms</b></div>
+      </div>
+      <p class="muted" style="margin-top:14px;font-size:13px">Slides render on a fixed 1280×720 canvas that is scaled to fit, so nothing is cut off; the narrated element glows yellow while it is being explained.</p>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Features</div>
+      <h2>What is shipped</h2>
+    </div>
+    <div class="grid">
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-5 3.6 1.9 5.8-4.9-3.6-4.9 3.6 1.9-5.8-5-3.6h6.1z"/></svg></div><h3>Topic suggestions</h3><p>8 ready course ideas fill topic and notes in one click.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h3>Approval gates</h3><p>Approve or reject outline and slides with feedback, max 3 retries.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><h3>Interactive slides</h3><p>Self-contained HTML slides with diagrams, simulations and quizzes.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3>AI classroom</h3><p>Teacher and two student agents discuss the lesson; teacher can join.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></div><h3>Narrated player</h3><p>Step-by-step voice with live element highlights and progress.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></svg></div><h3>Voice doubts</h3><p>Speak in any Indian language; language is detected automatically.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div><h3>Photo doubts</h3><p>Upload a picture of a question; Sarvam Vision reads it.</p></div>
+      <div class="feat"><span class="tag t-green">Live</span><div class="ic t-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg></div><h3>Answers in your language</h3><p>Replies match the student's language and can be played aloud.</p></div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Roadmap</div>
+      <h2>Now, next, later</h2>
+      <p class="muted">"Next" and "Later" are proposals, not built yet.</p>
+    </div>
+    <div class="lanes">
+      <div class="lane">
+        <div class="lane-head"><span class="dot" style="background:var(--green)"></span>Now · shipped</div>
+        <ul>
+          <li>Full lesson pipeline<small>outline → slides → discussion → improve → narrate</small></li>
+          <li>Student player + Ask Doubt<small>text, voice and photo</small></li>
+          <li>Fast narration<small>parallel prefetch + disk cache</small></li>
+          <li>Scaled 1280×720 slides<small>no overflow, glowing highlights</small></li>
+        </ul>
+      </div>
+      <div class="lane">
+        <div class="lane-head"><span class="dot" style="background:var(--primary)"></span>Next</div>
+        <ul>
+          <li>Live progress while generating<small>stream each slide as it is ready</small></li>
+          <li>Pick narration language<small>Hindi / Tamil / … voice for the whole lesson</small></li>
+          <li>Quiz after each lesson<small>auto-generated questions with scoring</small></li>
+          <li>Edit a single slide<small>regenerate one slide with feedback</small></li>
+        </ul>
+      </div>
+      <div class="lane">
+        <div class="lane-head"><span class="dot" style="background:var(--yellow)"></span>Later</div>
+        <ul>
+          <li>Login + roles<small>teacher and student accounts</small></li>
+          <li>Database storage<small>move from JSON files to Postgres</small></li>
+          <li>Doubt analytics<small>see which slides confuse students most</small></li>
+          <li>Deploy<small>hosted backend + frontend</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- API -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Backend API</div>
+      <h2>Endpoints at a glance</h2>
+    </div>
+    <div class="card scroll-x" style="padding:8px 8px">
+      <table>
+        <tr><th>Method</th><th>Path</th><th>What it does</th></tr>
+        <tr><td><span class="m t-teal">POST</span></td><td><code>/api/sessions</code></td><td>Create lesson, generate outline</td></tr>
+        <tr><td><span class="m t-teal">POST</span></td><td><code>/api/sessions/:id/outline</code></td><td>Approve → slides, or reject with feedback</td></tr>
+        <tr><td><span class="m t-teal">POST</span></td><td><code>/api/sessions/:id/content</code></td><td>Approve slides → discussion</td></tr>
+        <tr><td><span class="m t-teal">POST</span></td><td><code>/api/sessions/:id/discuss</code></td><td>One discussion round</td></tr>
+        <tr><td><span class="m t-teal">POST</span></td><td><code>/api/sessions/:id/end-discussion</code></td><td>Recommend slides to improve</td></tr>
+        <tr><td><span class="m t-teal">POST</span></td><td><code>/api/sessions/:id/regenerate</code></td><td>Improve picked slides + narration</td></tr>
+        <tr><td><span class="m t-yellow">POST</span></td><td><code>/api/stt</code></td><td>Voice → text + language</td></tr>
+        <tr><td><span class="m t-yellow">POST</span></td><td><code>/api/sessions/:id/doubts</code></td><td>Ask a doubt (text / photo)</td></tr>
+        <tr><td><span class="m t-violet">GET</span></td><td><code>/api/tts?text=&amp;lang=</code></td><td>Narration audio (mp3, cached)</td></tr>
+        <tr><td><span class="m t-grey">GET</span></td><td><code>/api/sessions[/:id]</code></td><td>List / read lessons</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>Sarvam Class Agent · run <code>npm run dev</code> in <code>backend/</code> and <code>frontend/</code></footer>
+</div>
+<script>
+  (function () {
+    var btn = document.getElementById("themeBtn");
+    var root = document.documentElement;
+    try { var saved = localStorage.getItem("roadmap-theme"); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+    btn.addEventListener("click", function () {
+      var dark = root.getAttribute("data-theme") === "dark" ||
+        (!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      var next = dark ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("roadmap-theme", next); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>
