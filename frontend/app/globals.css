@@ -101,3 +101,7 @@ button:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
   .hero { padding: 24px 20px; }
   h1 { font-size: 26px; }
 }
+@media (max-width: 520px) {
+  .brand { font-size: 15px; gap: 8px; white-space: nowrap; }
+  .nav-links a { padding: 6px 10px; font-size: 13px; white-space: nowrap; }
+}

@@ -24,3 +24,29 @@
 .qa details { font-size: 12px; color: var(--grey-600); }
 .qa details pre { white-space: pre-wrap; font-family: inherit; background: var(--grey-100); padding: 8px; border-radius: var(--radius); margin: 6px 0 0; }
 .bubble.a button { margin-top: 8px; min-height: 30px; padding: 4px 10px; font-size: 13px; }
+
+/* Right-hand panel: tabs + slide list */
+.now-title { font-size: 16px; margin: 0 0 12px; color: var(--grey-800); }
+.side-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--grey-200); border-radius: 12px; margin-bottom: 12px; }
+.side-tabs button { background: transparent; color: var(--grey-600); min-height: 38px; border-radius: 9px; font-size: 14px; }
+.side-tabs button:hover { background: rgba(255, 255, 255, 0.6); box-shadow: none; color: var(--grey-800); }
+.side-tabs button.on { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 3px rgba(145, 158, 171, 0.35); }
+.count { font-size: 11px; font-weight: 700; background: var(--primary-lighter); color: var(--primary-dark); padding: 1px 7px; border-radius: 99px; }
+.side-card { padding: 12px; }
+.slide-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-height: calc(100vh - 330px); min-height: 200px; overflow-y: auto; }
+button.slide-item { width: 100%; display: flex; align-items: flex-start; justify-content: flex-start; gap: 12px; text-align: left; background: transparent; color: var(--grey-800); border: 1px solid transparent; border-radius: 10px; padding: 10px; font-weight: 500; min-height: 0; }
+button.slide-item:hover { background: var(--grey-100); box-shadow: none; }
+button.slide-item.now { background: var(--primary-lighter); border-color: var(--primary-light); }
+.slide-num { flex: 0 0 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; background: var(--grey-200); color: var(--grey-600); }
+.slide-item.now .slide-num { background: var(--primary); color: #fff; }
+.slide-item.done .slide-num { background: #d3fcd2; color: #118d57; }
+.slide-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.slide-name { font-size: 14px; font-weight: 600; line-height: 1.35; }
+.slide-sub { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--grey-500); font-weight: 500; }
+.slide-item.now .slide-sub { color: var(--primary-dark); font-weight: 600; }
+.ask-cta { width: 100%; margin-top: 10px; }
+.other-lessons { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--grey-200); display: flex; flex-direction: column; gap: 6px; }
+.side-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--grey-500); margin-bottom: 2px; }
+.other-lesson { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 8px; color: var(--grey-800); font-size: 13.5px; font-weight: 500; }
+.other-lesson:hover { background: var(--grey-100); }
+@media (max-width: 900px) { .slide-list { max-height: 360px; } }

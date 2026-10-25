@@ -5,7 +5,9 @@ import { API } from "@/lib/api";
 import SlideFrame from "@/components/SlideFrame";
 import "@/app/teacher.css";
 
-export default function Player({ slides, onSlideChange }) {
+// index/onSlideChange let a parent (e.g. a sidebar list) drive which slide is shown;
+// showPills=false hides the built-in slide pills when the parent renders its own list.
+export default function Player({ slides, onSlideChange, index, showPills = true }) {
   const [slide, setSlide] = useState(0);
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -16,8 +18,15 @@ export default function Player({ slides, onSlideChange }) {
   const current = slides[slide];
 
   useEffect(() => {
-    onSlideChange?.(current?.id);
+    onSlideChange?.(current?.id, slide);
   }, [slide]);
+
+  useEffect(() => {
+    if (index !== undefined && index !== slide) {
+      setSlide(index);
+      setStep(0);
+    }
+  }, [index]);
   const action = current?.actions?.[step];
   const steps = current?.actions?.length || 0;
 
@@ -83,13 +92,16 @@ export default function Player({ slides, onSlideChange }) {
 
   return (
     <div className="card">
-      <div className="pills">
-        {slides.map((sl, k) => (
-          <button key={sl.id} className={`pill ${k === slide ? "active" : ""}`} onClick={() => goTo(k)}>
-            <span className="num">{k + 1}.</span> {sl.title} {sl.regenerated ? <Sparkles size={13} className="regen-icon" /> : null}
-          </button>
-        ))}
-      </div>
+      {showPills && (
+        <div className="pills">
+          {slides.map((sl, k) => (
+            <button key={sl.id} className={`pill ${k === slide ? "active" : ""}`} onClick={() => goTo(k)}>
+              <span className="num">{k + 1}.</span> {sl.title} {sl.regenerated ? <Sparkles size={13} className="regen-icon" /> : null}
+            </button>
+          ))}
+        </div>
+      )}
+      {!showPills && <h3 className="now-title">{slide + 1}. {current.title}</h3>}
       <div className="player-stage">
         <SlideFrame
           html={current.html}
