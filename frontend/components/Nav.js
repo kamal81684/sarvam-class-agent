@@ -1,4 +1,5 @@
 "use client";
+import { GraduationCap } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function Nav() {
@@ -8,7 +9,7 @@ export default function Nav() {
     <header className="nav">
       <div className="nav-inner">
         <a href="/" className="brand">
-          <span className="brand-logo">MAS</span>
+          <span className="brand-logo"><GraduationCap size={20} /></span>
           <span>Sarvam <span className="accent">Class Agent</span></span>
         </a>
         <nav className="nav-links">

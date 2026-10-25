@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
 import express from "express";
 import cors from "cors";
 import * as store from "./store.js";
@@ -112,16 +115,34 @@ app.post(
   })
 );
 
-// TTSAgent: Sarvam bulbul narration, cached in memory
-const audioCache = new Map();
+// TTSAgent: Sarvam bulbul narration. Cached on disk; concurrent requests for the
+// same text share one Sarvam call.
+const AUDIO_DIR = path.resolve("sessions/audio");
+fs.mkdirSync(AUDIO_DIR, { recursive: true });
+const inflight = new Map();
+
+function narrationAudio(text, lang) {
+  const key = crypto.createHash("sha1").update(`${process.env.TTS_MODEL}|${process.env.TTS_VOICE}|${lang}|${text}`).digest("hex");
+  const file = path.join(AUDIO_DIR, `${key}.mp3`);
+  if (fs.existsSync(file)) return Promise.resolve(fs.readFileSync(file));
+  if (!inflight.has(key)) {
+    const p = tts(text, lang)
+      .then((buf) => {
+        fs.writeFileSync(file, buf);
+        return buf;
+      })
+      .finally(() => inflight.delete(key));
+    inflight.set(key, p);
+  }
+  return inflight.get(key);
+}
+
 app.get("/api/tts", async (req, res) => {
   const text = String(req.query.text || "").trim();
   const lang = String(req.query.lang || "");
   if (!text) return res.status(400).json({ error: "text is required" });
   try {
-    const key = `${lang}|${text}`;
-    if (!audioCache.has(key)) audioCache.set(key, await tts(text, lang));
-    res.set("Content-Type", "audio/mpeg").send(audioCache.get(key));
+    res.set("Content-Type", "audio/mpeg").set("Cache-Control", "public, max-age=86400").send(await narrationAudio(text, lang));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
